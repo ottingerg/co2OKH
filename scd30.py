@@ -17,11 +17,13 @@ class co2sensor:
 
     
   def read(self):
-    self.i2c.writeto(self.addr, b'\x03\x00')
-    sleep_ms(10)
-    b = self.i2c.readfrom(self.addr,18)
-    return(unpack('>f',b[0:2]+b[3:5])[0])
-    
+    try:
+      self.i2c.writeto(self.addr, b'\x03\x00')
+      sleep_ms(10)
+      b = self.i2c.readfrom(self.addr,18)
+      return(unpack('>f',b[0:2]+b[3:5])[0])
+    except:
+      return(float('nan'))
 
   def run(self):
     while True:
@@ -52,5 +54,6 @@ class co2sensor:
     self.runflag = False
     self.wdtlock.release()
     return(runflag)
+
 
 
